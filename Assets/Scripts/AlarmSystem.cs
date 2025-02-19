@@ -34,10 +34,13 @@ public class AlarmSystem : MonoBehaviour
 
     private void Activate()
     {
+        if (_coroutineDecreaseVolume != null)
+            StopCoroutine(_coroutineDecreaseVolume);
+
         _audioSource.Play();
         _audioSource.volume = _minVolume;
 
-        _coroutineIncreaseVolume = StartCoroutine(IncreaseVolume());
+        _coroutineIncreaseVolume = StartCoroutine(ChangeValueVolume(_maxVolume));
     }
 
     private void Deactivate()
@@ -45,27 +48,16 @@ public class AlarmSystem : MonoBehaviour
         if (_coroutineIncreaseVolume != null)
             StopCoroutine(_coroutineIncreaseVolume);
 
-        _coroutineDecreaseVolume = StartCoroutine(DecreaseVolume());
+        _coroutineDecreaseVolume = StartCoroutine(ChangeValueVolume(_minVolume));
     }
 
-    private IEnumerator IncreaseVolume()
+    private IEnumerator ChangeValueVolume(float target)
     {
         var wait = new WaitForSeconds(_delay);
 
-        while (Mathf.Approximately(_audioSource.volume, _maxVolume) == false)
+        while (Mathf.Approximately(_audioSource.volume, target) == false)
         {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _maxVolume, _volumeStep);
-            yield return wait;
-        }
-    }
-
-    private IEnumerator DecreaseVolume()
-    {
-        var wait = new WaitForSeconds(_delay);
-
-        while (Mathf.Approximately(_audioSource.volume, _minVolume) == false)
-        {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _minVolume, _volumeStep);
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, target, _volumeStep);
             yield return wait;
         }
 

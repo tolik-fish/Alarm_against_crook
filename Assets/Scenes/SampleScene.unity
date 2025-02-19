@@ -589,9 +589,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a69885d7cbcd15e47990cb11e1d9ad4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _volumeStep: 0.05
-  _difference: 0.01
-  _delay: 0.2
+  _volumeStep: 0.1
+  _delay: 0.5
   _zone: {fileID: 170940957}
 --- !u!1 &170940954
 GameObject:

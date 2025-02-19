@@ -6,12 +6,12 @@ public class Thief : MonoBehaviour
     [SerializeField] private Cube _cube;
     [SerializeField] private Transform _escapeZone;
 
-    private Vector3 _direction;
+    private Vector3 _destination;
     private Mover _mover;
 
     private void Awake()
     {
-        _direction = _cube.transform.position;
+        _destination = _cube.transform.position;
         _mover = GetComponent<Mover>();
     }
 
@@ -27,7 +27,7 @@ public class Thief : MonoBehaviour
 
     private void Update()
     {
-        _mover.Move(transform, _direction);
+        _mover.Move(transform, _destination);
     }
 
     public void Activate() =>
@@ -37,5 +37,5 @@ public class Thief : MonoBehaviour
         gameObject.SetActive(false);
 
     private void GetEscapeZonePosition() =>
-        _direction = _escapeZone.position;
+        _destination = _escapeZone.position;
 }

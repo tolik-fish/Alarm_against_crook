@@ -386,7 +386,6 @@ GameObject:
   - component: {fileID: 157322383}
   - component: {fileID: 157322382}
   - component: {fileID: 157322381}
-  - component: {fileID: 157322387}
   - component: {fileID: 157322386}
   m_Layer: 0
   m_Name: Alarm_System
@@ -407,7 +406,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 99caa5a5b109c7442a692da61373bcf7, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -590,21 +589,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a69885d7cbcd15e47990cb11e1d9ad4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _volumeStep: 0.2
+  _volumeStep: 0.05
+  _difference: 0.01
+  _delay: 0.2
   _zone: {fileID: 170940957}
---- !u!114 &157322387
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 157322380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6adaca44f4ae8c14e9b6e35caeb410bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _delay: 0.5
 --- !u!1 &170940954
 GameObject:
   m_ObjectHideFlags: 0
@@ -1012,7 +1000,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391edec9ec05b364fb3301feaa920060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 1
+  _speed: 1.5
 --- !u!136 &493500480
 CapsuleCollider:
   m_ObjectHideFlags: 0

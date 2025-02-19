@@ -1,61 +1,75 @@
+using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource), typeof(Timer))]
+[RequireComponent(typeof(AudioSource))]
 public class AlarmSystem : MonoBehaviour
 {
     [SerializeField] private float _volumeStep;
+    [SerializeField] private float _delay;
     [SerializeField] private Zone _zone;
 
-    private float _minVolume = 0.01f;
+    private float _minVolume = 0f;
+    private float _maxVolume = 1f;
 
     private AudioSource _audioSource;
-    private Timer _timer;
+    private Coroutine _coroutineIncreaseVolume;
+    private Coroutine _coroutineDecreaseVolume;
 
     private void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
-        _timer = GetComponent<Timer>();
     }
 
     private void OnEnable()
     {
         _zone.Entered += Activate;
-        _zone.Leaved += ReverseStep;
+        _zone.Leaved += Deactivate;
     }
 
     private void OnDisable()
     {
         _zone.Entered -= Activate;
-        _zone.Leaved -= ReverseStep;
+        _zone.Leaved -= Deactivate;
     }
 
     private void Activate()
     {
-        PlaySound();
-
-        _timer.DelayArrived += ChangeVolume;
-
-        _timer.StartTimer();
-    }
-
-    private void PlaySound()
-    {
         _audioSource.Play();
         _audioSource.volume = _minVolume;
+
+        _coroutineIncreaseVolume = StartCoroutine(IncreaseVolume());
     }
 
-    private void ChangeVolume()
+    private void Deactivate()
     {
-        _audioSource.volume += _volumeStep;
+        if (_coroutineIncreaseVolume != null)
+            StopCoroutine(_coroutineIncreaseVolume);
 
-        if (_audioSource.volume == 0f)
+        _coroutineDecreaseVolume = StartCoroutine(DecreaseVolume());
+    }
+
+    private IEnumerator IncreaseVolume()
+    {
+        var wait = new WaitForSeconds(_delay);
+
+        while (Mathf.Approximately(_audioSource.volume, _maxVolume) == false)
         {
-            _timer.Stop();
-
-            _timer.DelayArrived -= ChangeVolume;
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _maxVolume, _volumeStep);
+            yield return wait;
         }
     }
 
-    private void ReverseStep() =>
-        _volumeStep *= -1f;
+    private IEnumerator DecreaseVolume()
+    {
+        var wait = new WaitForSeconds(_delay);
+
+        while (Mathf.Approximately(_audioSource.volume, _minVolume) == false)
+        {
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _minVolume, _volumeStep);
+            yield return wait;
+        }
+
+        if (_audioSource.isPlaying && _audioSource.volume == _minVolume)
+            _audioSource.Stop();
+    }
 }

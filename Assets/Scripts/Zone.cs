@@ -21,8 +21,9 @@ public class Zone : MonoBehaviour
             Entered?.Invoke();
     }
 
-    private void OnTriggerExit()
+    private void OnTriggerExit(Collider collider)
     {
-        Leaved?.Invoke();
+        if (collider.TryGetComponent<Thief>(out _))
+            Leaved?.Invoke();
     }
 }
